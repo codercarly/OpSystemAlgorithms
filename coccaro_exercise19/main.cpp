@@ -12,8 +12,6 @@ using namespace std;
 
 int jobs[10][3] = {{1, 0, 16}, {2, 3, 2}, {3, 5, 11}, {4, 9, 6}, {5, 10, 1}, {6, 12, 9},
     {7, 14, 4}, {8, 16, 14}, {9, 17, 1}, {10, 19, 8}};
-int name = 65;
-//test
 
 // Function to print the Letter name of each job
 void jobName() {
@@ -137,6 +135,17 @@ void sjn() {
         }
     }
     
+    // Print the jobs waiting array
+    cout << "Job's waiting to be processed:\n\n";
+    cout << "Job\t\tArrival\t\tCPU Cycle\n";
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << jobs[i][j] << "\t\t\t";
+        }
+        cout << endl;
+    }
+    cout << endl;
+    
 
 }
 
@@ -150,14 +159,11 @@ int main(int argc, const char * argv[]) {
     cout << "Job's waiting to be processed:\n\n";
     cout << "Job\t\tArrival\t\tCPU Cycle\n";
     for (int i = 0; i < 10; i++) {
-        cout << (char)name;
-        for (int j = 0; j < 2; j++) {
-            cout << setw(11) << jobs[i][j];
+        for (int j = 0; j < 3; j++) {
+            cout << jobs[i][j] << "\t\t\t";
         }
-        name++;
         cout << endl;
     }
-    
     cout << endl;
     
     // Run First Come First Serve Function
