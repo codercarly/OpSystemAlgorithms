@@ -13,6 +13,7 @@ using namespace std;
 int jobs[10][3] = {{1, 0, 16}, {2, 3, 2}, {3, 5, 11}, {4, 9, 6}, {5, 10, 1}, {6, 12, 9},
     {7, 14, 4}, {8, 16, 14}, {9, 17, 1}, {10, 19, 8}};
 int name = 65;
+//test
 
 // Function to print the Letter name of each job
 void jobName() {
@@ -120,15 +121,11 @@ void fcfs() {
  * Shortest Job Next Function
  **/
 void sjn() {
-    name = 65;
-    int cycleOrder[10][2];
-    cycleOrder[0][0] = 0;  // Set Job A arrival
-    cycleOrder[0][1] = 16; // Set Job A CPU cycle
     
     int temp1, temp2;
     
     for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
+        for (int j = 1; j < 10; j++) {
             if (jobs[j+1] < jobs[j]) {
                 temp1 = jobs [j][1];
                 temp2 = jobs [j][0];
@@ -140,15 +137,7 @@ void sjn() {
         }
     }
     
-    // Print chart
-    for (int i = 0; i < 10; i++) {
-        cout << (char)name;
-        for (int j = 0; j < 2; j++) {
-            cout << setw(11) << cycleOrder[i][j];
-        }
-        name++;
-        cout << endl;
-    }
+
 }
 
 
