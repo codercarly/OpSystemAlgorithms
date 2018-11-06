@@ -18,34 +18,34 @@ void jobName() {
     for(int x = 0; x < 10; x++) {
         switch (jobs[x][0]) {
             case 1:
-                cout << "A   ";
+                cout << "A" << setw(4);
                 break;
             case 2:
-                cout << "B   ";
+                cout << "B" << setw(4);
                 break;
             case 3:
-                cout << "C   ";
+                cout << "C" << setw(4);
                 break;
             case 4:
-                cout << "D   ";
+                cout << "D" << setw(4);
                 break;
             case 5:
-                cout << "E   ";
+                cout << "E" << setw(4);
                 break;
             case 6:
-                cout << "F   ";
+                cout << "F" << setw(4);
                 break;
             case 7:
-                cout << "G   ";
+                cout << "G" << setw(4);
                 break;
             case 8:
-                cout << "H   ";
+                cout << "H" << setw(4);
                 break;
             case 9:
-                cout << "I   ";
+                cout << "I" << setw(4);
                 break;
             case 10:
-                cout << "J\n";
+                cout << "J" << setw(4);
                 break;
             default:
                 break;
@@ -57,9 +57,6 @@ void jobName() {
  * First Come First Serve Function
  **/
 void fcfs() {
-    // First Come First Serve
-    cout << "First Come First Serve\n";
-    
     // Calculate finish time for each job
     int fcfsFinishTime[10];
     fcfsFinishTime [0] = {16}; // Set first job finish time
@@ -76,10 +73,11 @@ void fcfs() {
     }
     cout << "\nFCFS Turnaround Time for each job:\n";
     jobName();
-    for (int i = 0; i < 10; i++) {
-        cout << fcfsTurnaround[i] << "  ";
-    }
     cout << endl;
+    for (int i = 0; i < 10; i++) {
+        cout << left << fcfsTurnaround[i] << setw(4);
+    }
+    cout << right << endl;
     
     // Calculate wait time for each job
     int fcfsWaitTime[10];
@@ -90,8 +88,9 @@ void fcfs() {
     }
     cout << "\nFCFS Wait Time for each job:\n";
     jobName();
+    cout << endl;
     for (int i = 0; i < 10; i++) {
-        cout << fcfsWaitTime[i] << "  ";
+        cout << left << fcfsWaitTime[i] << setw(4);
     }
     cout << endl;
     cout << endl;
@@ -119,24 +118,31 @@ void fcfs() {
  * Shortest Job Next Function
  **/
 void sjn() {
+
+    int temp1a, temp1b, temp1c, temp2a, temp2b, temp2c;
     
-    int temp1, temp2;
-    
+    // Reorganize the job table based on CPU cycles (shortest ones next after the first job).
     for (int i = 0; i < 10; i++) {
         for (int j = 1; j < 10; j++) {
-            if (jobs[j+1] < jobs[j]) {
-                temp1 = jobs [j][1];
-                temp2 = jobs [j][0];
-                jobs[j][1] = jobs[j + 1][1];
-                jobs[j][0] = jobs[j + 1][0];
-                jobs[j + 1][1] = temp1;
-                jobs[j + 1][0] = temp2;
+            if (jobs[j][2] > jobs[i][2]) {
+                temp1a = jobs[j][0];
+                temp1b = jobs[j][1];
+                temp1c = jobs[j][2];
+                temp2a = jobs[i][0];
+                temp2b = jobs[i][1];
+                temp2c = jobs[i][2];
+                jobs[j][0] = temp2a;
+                jobs[j][1] = temp2b;
+                jobs[j][2] = temp2c;
+                jobs[i][0] = temp1a;
+                jobs[i][1] = temp1b;
+                jobs[i][2] = temp1c;
             }
         }
     }
     
     // Print the jobs waiting array
-    cout << "Job's waiting to be processed:\n\n";
+    cout << "Shortest Job Next Order:\n\n";
     cout << "Job\t\tArrival\t\tCPU Cycle\n";
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 3; j++) {
@@ -144,9 +150,69 @@ void sjn() {
         }
         cout << endl;
     }
+    
+    // Calculate finish time for each job
+    int sjnFinishTime[10];
+    sjnFinishTime[0] = {16}; // Set first job finish time
+    
+    for (int i = 1; i < 10; i++) {
+        sjnFinishTime[i] = sjnFinishTime[i - 1] + jobs[i][2];
+    }
+    
+    // Calculate turnaround time for each job
+    int sjnTurnaround[10];
+    
+    for (int i = 0; i < 10; i++) {
+        sjnTurnaround[i] = sjnFinishTime[i] - jobs[i][1];
+    }
+    cout << right << "\nSJN Turnaround Time for each job:\n";
+    jobName();
+    cout << endl;
+    for (int i = 0; i < 10; i++) {
+        cout << left << sjnTurnaround[i] << setw(4);
+    }
+    cout << right << endl;
+    
+    // Calculate wait time for each job
+    int sjnWaitTime[10];
+    sjnWaitTime[0] = 0;
+    
+    for (int i = 1; i < 10; i++) {
+        sjnWaitTime[i] = sjnFinishTime[i-1] - jobs[i][1];
+    }
+    cout << "\nSJN Wait Time for each job:\n";
+    jobName();
+    cout << endl;
+    for (int i = 0; i < 10; i++) {
+        cout << left << sjnWaitTime[i] << setw(4);
+    }
+    cout << right << endl;
     cout << endl;
     
+    // Calculate Average Wait Time
+    int avgWait = 0;
+    for (int num : sjnWaitTime) {
+        avgWait = avgWait + num;
+    }
+    avgWait = avgWait / 10;
+    
+    cout << "SJN Average Wait Time: " << avgWait << "\n";
+    
+    // Calculate Average Turnaround Time
+    int avgTurn = 0;
+    for (int num : sjnTurnaround) {
+        avgTurn = avgTurn + num;
+    }
+    avgTurn = avgTurn / 10;
+    
+    cout << "SJN Average Turnaround Time: " << avgTurn << "\n";
+}
 
+/**
+ * Shortest Remaining Time Function
+ **/
+void srt() {
+    
 }
 
 
@@ -156,7 +222,7 @@ void sjn() {
 int main(int argc, const char * argv[]) {
     
     // Print the jobs waiting array
-    cout << "Job's waiting to be processed:\n\n";
+    cout << "Jobs Order:\n";
     cout << "Job\t\tArrival\t\tCPU Cycle\n";
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 3; j++) {
@@ -164,12 +230,15 @@ int main(int argc, const char * argv[]) {
         }
         cout << endl;
     }
-    cout << endl;
-    
+  
     // Run First Come First Serve Function
     fcfs();
     cout << endl;
+    cout << endl;
+    
+    // Run Shortest Job Next Function
     sjn();
+    cout << endl;
     cout << endl;
     return 0;
 }
